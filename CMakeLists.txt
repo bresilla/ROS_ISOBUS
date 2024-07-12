@@ -1,8 +1,9 @@
-cmake_minimum_required(VERSION 3.8)
+cmake_minimum_required(VERSION 3.16)
 project(ros_isobus)
 
 include(FetchContent)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
+set(THREADS_PREFER_PTHREAD_FLAG ON)
 
 if(NOT CMAKE_C_STANDARD)
   set(CMAKE_C_STANDARD 99)
@@ -27,6 +28,7 @@ FetchContent_Declare(AgIsoStack
    GIT_TAG        main
 )
 FetchContent_MakeAvailable(AgIsoStack)
+# add_subdirectory("ext/AgIsoStack-plus-plus")
 
 include_directories(
   include
@@ -75,9 +77,8 @@ rosidl_generate_interfaces(${PROJECT_NAME}
 rosidl_get_typesupport_target(cpp_typesupport_target ${PROJECT_NAME} "rosidl_typesupport_cpp")
 
 add_executable(cantest src/cantest.cpp)
-target_link_libraries(cantest ${other_dependencies})
+target_link_libraries(cantest ${other_dependencies} "${cpp_typesupport_target}")
 ament_target_dependencies(cantest ${ros_dependencies})
-target_link_libraries(cantest "${cpp_typesupport_target}")
 
 install(TARGETS
   cantest
