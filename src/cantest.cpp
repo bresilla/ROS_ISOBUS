@@ -32,7 +32,7 @@ class Cantest : public rclcpp::Node {
                 RCLCPP_INFO(rclcpp::get_logger("rclcpp"), "MESSAGE RECEIVED");
             }, nullptr);
 
-            if(isobus::CANHardwareInterface::start() || !can_driver->get_is_valid()){
+            if(!isobus::CANHardwareInterface::start() || !can_driver->get_is_valid()){
                 RCLCPP_ERROR(this->get_logger(), "Failed to start CAN hardware interface");
             }
 
